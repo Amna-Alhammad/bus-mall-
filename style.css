@@ -35,3 +35,13 @@ header {
     margin: 10px;
     border-radius: 5px;
   }
+#my-chart {
+  text-align: center;
+  margin-left: 300px;
+  max-width: 40%;
+}
+#list {
+ 
+  margin-left: 430px;
+  color:beige;
+}
