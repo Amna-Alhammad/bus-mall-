@@ -18,6 +18,9 @@ const imageSection = document.getElementById('imags-section');
 let firstImageRandom;
 let secondImageRandom;
 let thirdImageRandom ;
+let prv1;
+let prv2;
+let prv3;
 
 
 
@@ -52,12 +55,7 @@ function render() {
 }
 
 
-
-
-
-
 imageSection.addEventListener('click',choseProdact);
-
 
 function choseProdact(event){
   if (count < rounds){
@@ -72,7 +70,8 @@ function choseProdact(event){
   }else if (count === rounds){
     imageSection.removeEventListener('click',choseProdact);
     render();
-
+    createChart();
+    console.table(Products.all);
 
   }
 }
@@ -83,27 +82,84 @@ function randomImage (){
   secondImageRandom = Products.all[randomNumber(0,nameOfProducts.length -1)];
   thirdImageRandom =Products.all[randomNumber(0,nameOfProducts.length -1)];
 
-
   firstImage.setAttribute('src', firstImageRandom.path);
   secondImage.setAttribute('src' ,secondImageRandom.path);
   thirdImage.setAttribute('src' , thirdImageRandom.path);
 
+  if (count > 0){
+    while (firstImageRandom === secondImageRandom || firstImageRandom===thirdImageRandom || secondImageRandom === thirdImageRandom || firstImageRandom === prv1 || firstImageRandom === prv2 || firstImageRandom === prv3 || secondImageRandom === prv1|| secondImageRandom === prv2 || secondImageRandom === prv3 || thirdImageRandom === prv1 || thirdImageRandom === prv2 || thirdImageRandom === prv3){
+      firstImageRandom = Products.all[randomNumber(0,nameOfProducts.length -1)];
+      secondImageRandom = Products.all[randomNumber(0,nameOfProducts.length -1)];
+      thirdImageRandom =Products.all[randomNumber(0,nameOfProducts.length -1)];
+      firstImage.setAttribute('src', firstImageRandom.path);
+      secondImage.setAttribute('src' ,secondImageRandom.path);
+      thirdImage.setAttribute('src' , thirdImageRandom.path);
+    }
 
-
-
-  while(firstImageRandom === secondImageRandom || firstImageRandom===thirdImageRandom || secondImageRandom === thirdImageRandom){
-    firstImageRandom = Products.all[randomNumber(0,nameOfProducts.length -1)];
-    secondImageRandom = Products.all[randomNumber(0,nameOfProducts.length -1)];
-    thirdImageRandom =Products.all[randomNumber(0,nameOfProducts.length -1)];
-
-
-    firstImage.setAttribute('src', firstImageRandom.path);
-    secondImage.setAttribute('src' ,secondImageRandom.path);
-    thirdImage.setAttribute('src' , thirdImageRandom.path);
+  }else{
+    while(firstImageRandom === secondImageRandom || firstImageRandom===thirdImageRandom || secondImageRandom === thirdImageRandom){
+      firstImageRandom = Products.all[randomNumber(0,nameOfProducts.length -1)];
+      secondImageRandom = Products.all[randomNumber(0,nameOfProducts.length -1)];
+      thirdImageRandom =Products.all[randomNumber(0,nameOfProducts.length -1)];
+      firstImage.setAttribute('src', firstImageRandom.path);
+      secondImage.setAttribute('src' ,secondImageRandom.path);
+      thirdImage.setAttribute('src' , thirdImageRandom.path);}
   }
-
-
+  prv1 = firstImageRandom;
+  prv2= secondImageRandom;
+  prv3 =thirdImageRandom;
 }
-
-
 randomImage();
+
+
+function createChart (){
+  let productNames =[];
+  let productvotes =[];
+  let productViews = [];
+  for (let i = 0 ; i<nameOfProducts.length;i++){
+    productNames.push(Products.all[i].name);
+    productvotes.push(Products.all[i].votes);
+    productViews.push(Products.all[i].view);
+    console.log('name',productNames);
+    console.log('vote',productvotes);
+    console.log('view',productViews);
+  }
+  var ctx = document.getElementById('my-chart').getContext('2d');
+  // eslint-disable-next-line no-unused-vars
+  // eslint-disable-next-line no-undef
+  new Chart(ctx, {
+    type: 'bar',
+    data: {
+      labels:
+              productNames,
+      datasets: [{
+        label: '# of Votes',
+        data: productvotes,
+        backgroundColor: 'black',
+        borderColor: 'white',
+        borderWidth: 1,
+
+      },
+      {
+
+        label: '# of views',
+        data: productViews,
+        backgroundColor: 'darkread',
+        borderColor:'white',
+        borderWidth: 1,
+
+
+      }]
+    },
+    options: {
+      scales: {
+        yAxes: [{
+          ticks: {
+            beginAtZero: true
+          }
+        }]
+      }
+    }
+  });
+}
+//createChart();
