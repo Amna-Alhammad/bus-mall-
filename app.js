@@ -32,18 +32,28 @@ function Products(name){
   this.votes = 0;
   this.view = 0;
   Products.all.push(this);
-
-
 }
-
-
 for(let i = 0; i< nameOfProducts.length ; i++){
   new Products(nameOfProducts[i]);
 }
 console.table(Products.all);
 
+function retrive(){
+  var productImgArry = JSON.stringify(Products.all);
+  localStorage.setItem('productsViewAndClicks', productImgArry);
 
+}
+function getItem() {
 
+  var productsViewAndVots = localStorage.getItem('productsViewAndClicks');
+
+  if(productsViewAndVots!==null){
+    console.log(productsViewAndVots);
+    // eslint-disable-next-line no-undef
+    Products.all = JSON.parse(productsViewAndVots);
+    render();
+  }
+}
 
 function render() {
   const ulE1 = document.getElementById('list');
@@ -71,6 +81,7 @@ function choseProdact(event){
     imageSection.removeEventListener('click',choseProdact);
     render();
     createChart();
+    retrive();
     console.table(Products.all);
 
   }
@@ -162,4 +173,4 @@ function createChart (){
     }
   });
 }
-//createChart();
+getItem();
